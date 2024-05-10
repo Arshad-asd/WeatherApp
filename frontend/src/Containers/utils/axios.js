@@ -1,5 +1,5 @@
 import axios from "axios";
-export const baseUrl = "https://backend.blearning.website";
+export const baseUrl = "http://127.0.0.1:8000";
 const instance = axios.create({
   baseURL: `${baseUrl}`,
 });
@@ -12,14 +12,3 @@ export const adminInstance = axios.create({
 });
 
 
-const token = localStorage.getItem("tutorInfo")
-    ? JSON.parse(localStorage.getItem("tutorInfo")).access
-    : null;
-
-export const tutorInstance = axios.create({
-  baseURL: `${baseUrl}/api/tutor`,
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-  },
-});

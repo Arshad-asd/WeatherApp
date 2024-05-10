@@ -1,10 +1,14 @@
 import { BrowserRouter } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Routers from "./Containers/routes/Routers";
+import { useLocation } from "react-router-dom";
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+  let location = useLocation();
+  let adminHeader = location.pathname.startsWith("/auth");
   return (
     <div className="flex ">
          <ToastContainer
@@ -16,11 +20,11 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+
       />
-      <BrowserRouter>
-      <Sidebar />
+      {adminHeader &&  <Sidebar />}
+
       <Routers />
-      </BrowserRouter>
     </div>
   );
 }

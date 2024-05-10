@@ -6,8 +6,8 @@ import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 function Sidebar() {
     const menus = [
-        { name: "dashboard", link: '/dashboard', icon: MdOutlineSpaceDashboard },
-        { name: "usermanagement", link: '/users', icon: AiOutlineUser }
+        { name: "dashboard", link: '/auth/dashboard', icon: MdOutlineSpaceDashboard },
+        { name: "usermanagement", link: '/auth/users', icon: AiOutlineUser }
 
     ];
     const [open, setOpen] = useState(true);

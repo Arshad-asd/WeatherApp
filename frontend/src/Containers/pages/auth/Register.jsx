@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { validateEmail, validatePassword, validateName, validateField } from '../../utils/formValidation';
 import { toast } from 'react-toastify';
 import instance from '../../utils/axios.js'
+import bacgroundImg from '../../../assets/register.jpg'
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -77,7 +78,7 @@ const Register = () => {
   
 
   return (
-    <div className="flex justify-center items-center min-h-screen w-full">
+    <div className="flex justify-center items-center min-h-screen w-full"style={{backgroundImage: `url(${bacgroundImg})`}}>
       <div className="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 px-4">
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
           <h2 className="text-2xl mb-6 text-center">Register</h2>

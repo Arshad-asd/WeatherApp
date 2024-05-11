@@ -1,97 +1,103 @@
-import React from "react";
-const products = [
-  {
-    id: 1,
-    Category: "Electronics",
-    Company: "Apple",
-    Product: "iPhone 13",
-    Description: "The latest iPhone with advanced features",
-    Price: 999,
-  },
-  {
-    id: 2,
-    Category: "Clothing",
-    Company: "Nike",
-    Product: "Running Shoes",
-    Description: "High-quality running shoes for athletes",
-    Price: 89,
-  },
-  {
-    id: 3,
-    Category: "Books",
-    Company: "Penguin Books",
-    Product: "The Great Gatsby",
-    Description: "Classic novel by F. Scott Fitzgerald",
-    Price: 12,
-  },
-  {
-    id: 4,
-    Category: "Home Appliances",
-    Company: "Samsung",
-    Product: "Smart Refrigerator",
-    Description: "Refrigerator with smart features and spacious design",
-    Price: 14,
-  },
-];
-const UserManagement = () => {
+import { DataGrid } from "@mui/x-data-grid";
+import { FaUnlock, FaLock } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { adminInstance } from "../../utils/axios";
+import { useSelector } from "react-redux";
+
+
+export default function UserManagement() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredRows, setFilteredRows] = useState([]);
+  const [blocked, setBlocked] = useState(false);
+  const { userInfo } = useSelector((state) => state.auth || {});
+  // Define columns with details for each field
+  const columns = [
+    { field: "id", headerName: "ID", width: 50 },
+    { field: "email", headerName: "Email", width: 130 },
+    { field: "role", headerName: "Role", width: 150 },
+    {
+      field: "is_active",
+      headerName: "Active",
+      width: 100,
+      renderCell: (params) => (
+        <div className={`pill ${params.row.is_active ? "active" : "inactive"}`}>
+          {params.row.is_active ? "Active" : "Inactive"}
+        </div>
+      ),
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 100,
+      renderCell: (params) => (
+        <button
+          className={`custom-button${
+            params.row.is_active ? "-inactive" : "-active"
+          }`}
+          onClick={(e) =>
+            handleBlockClick(e, params.row.id, params.row.is_active)
+          }
+        >
+          {params.row.is_active ? <FaLock size={18} /> : <FaUnlock size={18} />}
+        </button>
+      ),
+    },
+
+  ];
+
+  const handleBlockClick = async (e, userId) => {
+    e.stopPropagation();
+    try {
+      setBlocked(!blocked);
+      const token = userInfo.access; // Get the access token from the user info
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      await adminInstance.patch(`/block-unblock/${userId}/`, null, config); // Pass the config with the token to the patch request
+      fetchData(); // Fetch data after blocking/unblocking user
+    } catch (error) {
+      console.error("Error blocking user:", error);
+    }
+  };
+  
+
+  const fetchData = async () => {
+    try {
+      const token = userInfo.access
+      console.log('token',token)
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await adminInstance.get('/users-list/', config);
+      setFilteredRows(res.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchData();
+  }, [blocked, searchTerm]);
+
   return (
-    <div className="min-h-screen h-full bg-white flex  items-center justify-center py-10">
-      <div className="lg:min-w-[1022px] xl:min-w-[1230px] 2xl:min-w-[1530px]">
-        <div className="w-full  px-2 max-w-[453px] mx-auto">
-          <h1 className="text-xl sm:text-2xl font-medium mb-2">
-            Tailwind Mobile Responsive Table
-          </h1>
-        </div>
-        <div class="flex items-center justify-center">
-          <div class="">
-            <table class="sm:inline-table w-full flex flex-row sm:bg-white  overflow-hidden ">
-              <thead class="text-black">
-                {products?.map((data, index) => (
-                  <tr
-                    class={`bg-[#222E3A]/[6%] flex flex-col sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0 ${
-                      index == 0 ? "sm:flex" : "sm:hidden"
-                    }`}
-                    key={index}
-                  >
-                    <th class="py-3 px-5 text-left border border-b rounded-tl-lg sm:rounded-none">
-                      ID
-                    </th>
-                    <th class="py-3 px-5 text-left border border-b">
-                      Category
-                    </th>
-                    <th class="py-3 px-5 text-left border border-b">Company</th>
-                    <th class="py-3 px-5 text-left border border-t rounded-bl-lg sm:rounded-none">
-                      Price
-                    </th>
-                  </tr>
-                ))}
-              </thead>
-              <tbody class="flex-1 sm:flex-none">
-                {products?.map((data, index) => (
-                  <tr
-                    class="flex flex-col sm:table-row mb-2 sm:mb-0"
-                    key={index}
-                  >
-                    <td class="border hover:bg-[#222E3A]/[6%] hover:sm:bg-transparent py-3 px-5">
-                      {data?.id}
-                    </td>
-                    <td class="border hover:bg-[#222E3A]/[6%]  hover:sm:bg-transparent py-3 px-5">
-                      {data?.Category}
-                    </td>
-                    <td class="border hover:bg-[#222E3A]/[6%]  hover:sm:bg-transparent py-3 px-5">
-                      {data?.Company}
-                    </td>
-                    <td class="border hover:bg-[#222E3A]/[6%]  hover:sm:bg-transparent py-3 px-5 cursor-pointer">
-                      {"$" + data?.Price}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+<div className="flex justify-center items-center h-full">
+  <div className="m-10">
+    <DataGrid
+      rows={filteredRows}
+      columns={columns}
+      pageSize={5}
+      checkboxSelection
+      getRowId={(row) => row.id}
+      className="" // Ensure the DataGrid takes full width
+    />
+  </div>
+</div>
+
+    </>
   );
-};
-export default UserManagement;
+}

@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
-import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineUser } from "react-icons/ai";
+import { RiLogoutCircleRLine } from "react-icons/ri";
 
 import { Link } from "react-router-dom";
+
 function Sidebar() {
     const menus = [
-        { name: "dashboard", link: '/auth/dashboard', icon: MdOutlineSpaceDashboard },
-        { name: "usermanagement", link: '/auth/users', icon: AiOutlineUser }
+        { name: "dashboard", link: '/auth/admin/dashboard', icon: MdOutlineSpaceDashboard },
+        { name: "usermanagement", link: '/auth/admin/users', icon: AiOutlineUser }
 
     ];
     const [open, setOpen] = useState(true);
@@ -37,10 +39,22 @@ function Sidebar() {
                             </Link>
                         ))
                     }
+                    {/* Add some space between the link and the logout button */}
+                    <div className="mt-4">
+                        {open ? (
+                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                                Logout
+                            </button>
+                        ) : (
+                            <button className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline w-full">
+                                <RiLogoutCircleRLine size={20} />
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         </section>
     )
 }
 
-export default Sidebar
+export default Sidebar;

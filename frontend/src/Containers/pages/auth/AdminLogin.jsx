@@ -1,17 +1,15 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import instance from "../../utils/axios";
-import { setCredentials } from '../../../redux/slices/userSlice/authSlice';
-import bacgroundImg from '../../../assets/register.jpg'
-
+import { setAdminCredentials } from '../../../redux/slices/adminSlice/adminAuthSlice';
+import bgImage from '../../../assets/register.jpg';
 import { jwtDecode } from "jwt-decode";
 
-const Login = () => {
+const AdminLogin = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -20,18 +18,15 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { adminInfo } = useSelector((state) => state.adminAuth);
 
   useEffect(() => {
-
-    // Add your condition here
-    const shouldNavigate = userInfo;
-
+    const shouldNavigate = adminInfo;
     if (shouldNavigate) {
-      console.log("Navigating user dashboard");
-      navigate("/auth/user/dashboard");
+      console.log("Navigate dashboard");
+      navigate("/auth/admin/dashboard");
     }
-  }, [navigate, userInfo]);
+  }, [navigate, adminInfo]);
 
   const [validationErrors, setValidationErrors] = useState({});
 
@@ -41,8 +36,6 @@ const Login = () => {
       ...prevData,
       [name]: value,
     }));
-
-    // Clear validation error when input changes
     setValidationErrors((prevErrors) => ({
       ...prevErrors,
       [name]: '',
@@ -51,7 +44,7 @@ const Login = () => {
 
   const showToast = (message, type = "error") => {
     toast[type](message, {
-      autoClose: 3000, // 3 seconds
+      autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -62,30 +55,29 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const res = await instance.post(`/api/user/login/`, formData);
-
       try {
-        // Decoding access token
         const decodedAccessToken = jwtDecode(res.data.access);
-
-        // Dispatch action to set credentials
-        dispatch(
-          setCredentials({ user_role: decodedAccessToken.role, ...res.data })
-        );
         
-        showToast("Successfully logged in", 'success');
-        navigate('/auth/dashboard')
+        // Check if the role is admin
+        if (decodedAccessToken.role === 'admin') {
+          dispatch(
+            setAdminCredentials({ user_role: decodedAccessToken.role, ...res.data })
+          );
+          showToast("Successfully logged in", 'success');
+          navigate('/auth/dashboard');
+        } else {
+          // Show toast error if not admin
+          showToast("Only admin users can log in", "error");
+        }
       } catch (decodeError) {
         console.error("Error decoding token:", decodeError.message);
         showToast("Error decoding token", "error");
       }
     } catch (error) {
       console.error("API request error:", error);
-
       if (error.response && error.response.status === 400) {
-        // If there are validation errors from the API, set them in the state
         setValidationErrors(error.response.data);
       } else {
         showToast(
@@ -95,12 +87,13 @@ const Login = () => {
       }
     }
   };
+  
 
   return (
-    <div className="flex justify-center items-center min-h-screen w-full"style={{backgroundImage: `url(${bacgroundImg})`}}>
+    <div className="flex justify-center items-center min-h-screen w-full" style={{backgroundImage: `url(${bgImage})`}}>
       <div className="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 px-4">
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-          <h2 className="text-2xl mb-6 text-center">Login</h2>
+          <h2 className="text-2xl mb-6 text-center">Admin Login</h2>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
               Email
@@ -152,4 +145,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

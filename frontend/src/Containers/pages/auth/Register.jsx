@@ -143,6 +143,9 @@ const Register = () => {
                 <span className="ml-2">Register with Google</span>
               </div>
             </button> 
+            <div className='p-2 flex justify-end'>
+             <span>I have an account | </span> <Link to="/login" className='text-blue-600'>Login now </Link>
+            </div>
           </div>
         </form>
       </div>

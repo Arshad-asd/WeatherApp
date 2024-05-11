@@ -12,7 +12,7 @@ export default function ErrorPage() {
   };
 
   return (
-    <div className='h-screen'>
+    <div className='h-screen w-full'>
 <section className="flex items-center h-full p-16 bg-black text-gray-100 dark:bg-black dark:text-gray-100">
         <div className="container flex flex-col items-center justify-center px-5 mx-auto my-8">
           <div className="max-w-md text-center">

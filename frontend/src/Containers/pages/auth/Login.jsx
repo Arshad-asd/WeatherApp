@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -74,7 +74,7 @@ const Login = () => {
         dispatch(
           setCredentials({ user_role: decodedAccessToken.role, ...res.data })
         );
-        
+
         showToast("Successfully logged in", 'success');
         navigate('/auth/dashboard')
       } catch (decodeError) {
@@ -83,21 +83,22 @@ const Login = () => {
       }
     } catch (error) {
       console.error("API request error:", error);
-
-      if (error.response && error.response.status === 400) {
+  
+      if (error.response && error.response.status === 401) {
+        // If the error is 401 Unauthorized, display the error message from the server
+        showToast(error.response.data.detail || "Unauthorized", "error");
+      } else if (error.response && error.response.status === 400) {
         // If there are validation errors from the API, set them in the state
         setValidationErrors(error.response.data);
       } else {
-        showToast(
-          error?.response?.data || error.error || "Error in API request",
-          "error"
-        );
+        // For other errors, display a generic error message
+        showToast(error?.response?.data || "Server Error", "error");
       }
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen w-full"style={{backgroundImage: `url(${bacgroundImg})`}}>
+    <div className="flex justify-center items-center min-h-screen w-full" style={{ backgroundImage: `url(${bacgroundImg})` }}>
       <div className="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 px-4">
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
           <h2 className="text-2xl mb-6 text-center">Login</h2>
@@ -131,6 +132,7 @@ const Login = () => {
             />
             {validationErrors.password && <p className="text-sm text-red-500 mt-1">{validationErrors.password}</p>}
           </div>
+
           <div className="flex flex-col">
             <button
               type="submit"
@@ -138,6 +140,11 @@ const Login = () => {
             >
               Login
             </button>
+            <div className="flex justify-center items-center  m-2">
+              <hr className="border-gray-300 flex-grow" />
+              <span className="">or</span>
+              <hr className="border-gray-300 flex-grow" />
+            </div>
             <button
               type="button"
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center justify-center"

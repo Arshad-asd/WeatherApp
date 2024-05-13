@@ -3,12 +3,15 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import { RiLogoutCircleRLine } from "react-icons/ri";
+import { SiSimpleanalytics } from "react-icons/si";
+
 
 import { Link } from "react-router-dom";
 
 function Sidebar() {
     const menus = [
         { name: "dashboard", link: '/auth/admin/dashboard', icon: MdOutlineSpaceDashboard },
+        { name: "analytics", link: '/auth/admin/analytics', icon: SiSimpleanalytics },
         { name: "usermanagement", link: '/auth/admin/users', icon: AiOutlineUser }
 
     ];

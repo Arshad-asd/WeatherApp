@@ -131,13 +131,6 @@ const AdminLogin = () => {
             >
               Login
             </button>
-            <button
-              type="button"
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center justify-center"
-            >
-              <FcGoogle />
-              Login with Google
-            </button>
           </div>
         </form>
       </div>

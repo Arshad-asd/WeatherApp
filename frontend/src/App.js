@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
   let location = useLocation();
   let adminHeader = location.pathname.startsWith("/auth/admin");
+  let userHeader = location.pathname.startsWith("/auth/user");
   
   return (
     <div className="flex">
@@ -23,10 +24,10 @@ function App() {
         draggable
         pauseOnHover
       />
-      {adminHeader ? <Sidebar /> : <UserSidebar />} {/* Render AdminSidebar if adminHeader is true, otherwise render UserSidebar */}
+      {adminHeader && <Sidebar />} {/* Render Sidebar if adminHeader is true */}
+      {userHeader && <UserSidebar />} {/* Render UserSidebar if userHeader is true */}
       <Routers />
     </div>
   );
 }
-
 export default App;

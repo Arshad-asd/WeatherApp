@@ -11,6 +11,7 @@ import ErrorPage from '../../components/ErrorPage';
 import WelcomPage from '../../components/WelcomPage';
 import AdminLogin from '../pages/auth/AdminLogin';
 import UserDashboard from '../pages/dashboard/UserDashboard';
+import Analytics from '../pages/analytics/Analytics';
 
 const Routers = () => {
   return (
@@ -26,7 +27,8 @@ const Routers = () => {
       <Route path='/admin/login' element={<AdminLogin />} />
       <Route path='' element={<PrivateRouteAdmin />} > 
       <Route path="/auth/admin/dashboard" element={<Dashboard />} />
-           <Route path="/auth/admin/users" element={<UserManagement />} />
+      <Route path="/auth/admin/users" element={<UserManagement />} />
+      <Route path="/auth/admin/analytics" element={<Analytics />} />
       </Route>
       <Route path="*" element={<ErrorPage/>} />
 

@@ -9,7 +9,7 @@ export default function UserManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRows, setFilteredRows] = useState([]);
   const [blocked, setBlocked] = useState(false);
-  const { userInfo } = useSelector((state) => state.auth || {});
+  const { adminInfo } = useSelector((state) => state.adminAuth || {});
   // Define columns with details for each field
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
@@ -49,7 +49,7 @@ export default function UserManagement() {
     e.stopPropagation();
     try {
       setBlocked(!blocked);
-      const token = userInfo.access; // Get the access token from the user info
+      const token = adminInfo.access; // Get the access token from the user info
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ export default function UserManagement() {
 
   const fetchData = async () => {
     try {
-      const token = userInfo.access
+      const token = adminInfo.access
       console.log('token',token)
       const config = {
         headers: {

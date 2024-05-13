@@ -4,9 +4,10 @@ import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { SiSimpleanalytics } from "react-icons/si";
-
-
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { adminLogout } from '../redux/slices/adminSlice/adminAuthSlice';
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Sidebar() {
     const menus = [
@@ -16,6 +17,26 @@ function Sidebar() {
 
     ];
     const [open, setOpen] = useState(true);
+
+    const showToast = (message, type = "error") => {
+        toast[type](message, {
+          autoClose: 3000, // 3 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      };
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        dispatch(adminLogout());
+        showToast("Logout successfully", "success");
+        navigate('/admin/login')
+      };
+
     return (
         <section className='flex gap-6'>
             <div className={`bg-[#0c0c0c] min-h-screen ${open ? 'w-60' : 'w-16'} duration-500 text-gray-100 px-4`}>
@@ -45,11 +66,11 @@ function Sidebar() {
                     {/* Add some space between the link and the logout button */}
                     <div className="mt-4">
                         {open ? (
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                            <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
                                 Logout
                             </button>
                         ) : (
-                            <button className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline w-full">
+                            <button onClick={handleLogout} className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline w-full">
                                 <RiLogoutCircleRLine size={20} />
                             </button>
                         )}

@@ -3,8 +3,12 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import { RiLogoutCircleRLine } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { logout } from '../redux/slices/userSlice/authSlice';
+import { clearGoogleUserInfo } from '../redux/slices/googleSlice/googleAuthSlice';
 
-import { Link } from "react-router-dom";
 
 function Sidebar() {
     const menus = [
@@ -12,6 +16,38 @@ function Sidebar() {
 
     ];
     const [open, setOpen] = useState(true);
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const { userInfo } = useSelector(state => state.auth);
+    const { googleUserInfo } = useSelector(state => state.googleAuth);
+
+    const showToast = (message, type = "error") => {
+        toast[type](message, {
+            autoClose: 3000, // 3 seconds
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
+
+    const handleLogout = () => {
+        if (userInfo) {
+            dispatch(logout());
+            showToast("Logout successfully", "success");
+            navigate('/login');
+        } else if (googleUserInfo) {
+            dispatch(clearGoogleUserInfo());
+            showToast("Logout successfully", "success");
+            // Redirect to the login page or do any other necessary actions
+        } else {
+            // Handle if neither userInfo nor googleUserInfo is available
+            showToast("No user logged in", "error");
+        }
+    };
+
     return (
         <section className='flex gap-6'>
             <div className={`bg-[#0c0c0c] min-h-screen ${open ? 'w-60' : 'w-16'} duration-500 text-gray-100 px-4`}>
@@ -41,11 +77,11 @@ function Sidebar() {
                     {/* Add some space between the link and the logout button */}
                     <div className="mt-4">
                         {open ? (
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                            <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
                                 Logout
                             </button>
                         ) : (
-                            <button className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline w-full">
+                            <button onClick={handleLogout} className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline w-full">
                                 <RiLogoutCircleRLine size={20} />
                             </button>
                         )}

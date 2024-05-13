@@ -1,11 +1,14 @@
-import {Outlet,Navigate} from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { Outlet, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const PrivateRouteUser = ()=>{
-    const {userInfo}=useSelector(state=>state.auth)
-    return(
-        userInfo? <Outlet/>:<Navigate to ='/login'/>
-    )
-}
+const PrivateRouteUser = () => {
+    const { userInfo } = useSelector(state => state.auth);
+    const { googleUserInfo } = useSelector(state => state.googleAuth);
 
-export default PrivateRouteUser
+    // Check if either userInfo or googleUserInfo is present
+    const isAuthenticated = userInfo || googleUserInfo;
+
+    return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
+};
+
+export default PrivateRouteUser;

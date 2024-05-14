@@ -17,7 +17,7 @@ This repository contains the source code for a weather station web app developed
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/weather-station-webapp.git
+git clone https://github.com/Arshad-asd/WeatherApp.git
 ```
 
 2. Create and activate a virtual environment:

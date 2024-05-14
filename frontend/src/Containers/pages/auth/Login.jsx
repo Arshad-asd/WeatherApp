@@ -29,7 +29,7 @@ const Login = () => {
 
   useEffect(() => {
     const shouldNavigate = userInfo || googleUserInfo;
-  
+
     if (shouldNavigate) {
       console.log("Navigating user dashboard");
       navigate("/auth/user/dashboard");
@@ -88,13 +88,10 @@ const Login = () => {
       console.error("API request error:", error);
 
       if (error.response && error.response.status === 401) {
-        // If the error is 401 Unauthorized, display the error message from the server
         showToast(error.response.data.detail || "Unauthorized", "error");
       } else if (error.response && error.response.status === 400) {
-        // If there are validation errors from the API, set them in the state
         setValidationErrors(error.response.data);
       } else {
-        // For other errors, display a generic error message
         showToast(error?.response?.data || "Server Error", "error");
       }
     }
@@ -125,9 +122,8 @@ const Login = () => {
               placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                validationErrors.email ? "border-red-500" : ""
-              }`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${validationErrors.email ? "border-red-500" : ""
+                }`}
             />
             {validationErrors.email && (
               <p className="text-sm text-red-500 mt-1">
@@ -149,9 +145,8 @@ const Login = () => {
               placeholder="Enter your password"
               value={formData.password}
               onChange={handleChange}
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                validationErrors.password ? "border-red-500" : ""
-              }`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${validationErrors.password ? "border-red-500" : ""
+                }`}
             />
             {validationErrors.password && (
               <p className="text-sm text-red-500 mt-1">
@@ -177,7 +172,7 @@ const Login = () => {
                 onSuccess={(credentialResponse) => {
                   console.log(credentialResponse);
                   const decoded = jwtDecode(credentialResponse.credential)
-                  console.log('decoded',decoded)
+                  console.log('decoded', decoded)
                   dispatch(
                     setGoogleUserInfo({ user_role: 'user', ...decoded })
                   );
@@ -188,7 +183,7 @@ const Login = () => {
                   console.log("Login Failed");
                 }}
               />
-              
+
             </GoogleOAuthProvider>
           </div>
         </form>

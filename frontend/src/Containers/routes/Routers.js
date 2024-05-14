@@ -4,8 +4,8 @@ import { Routes, Route } from 'react-router-dom';
 import Dashboard from '../pages/dashboard/Dashboard';
 import Register from '../pages/auth/Register';
 import UserManagement from '../pages/usermanagement/UserManagement';
-import PrivateRouteUser from '../utils/PrivateRouteUser'
-import PrivateRouteAdmin from '../utils/PrivateRouteAdmin';
+import PrivateRouteUser from './PrivateRouteUser'
+import PrivateRouteAdmin from './PrivateRouteAdmin';
 import Login from '../pages/auth/Login';
 import ErrorPage from '../../components/ErrorPage';
 import WelcomPage from '../../components/WelcomPage';

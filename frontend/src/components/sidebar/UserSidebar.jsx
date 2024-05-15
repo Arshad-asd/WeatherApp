@@ -3,39 +3,50 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { AiOutlineUser } from "react-icons/ai";
 import { RiLogoutCircleRLine } from "react-icons/ri";
-import { SiSimpleanalytics } from "react-icons/si";
-import { useDispatch } from "react-redux";
-import { adminLogout } from '../redux/slices/adminSlice/adminAuthSlice';
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { logout } from '../../redux/slices/userSlice/authSlice';
+import { clearGoogleUserInfo } from '../../redux/slices/googleSlice/googleAuthSlice';
+
 
 function Sidebar() {
     const menus = [
-        { name: "dashboard", link: '/auth/admin/dashboard', icon: MdOutlineSpaceDashboard },
-        { name: "analytics", link: '/auth/admin/analytics', icon: SiSimpleanalytics },
-        { name: "usermanagement", link: '/auth/admin/users', icon: AiOutlineUser }
+        { name: "dashboard", link: '/auth/user/dashboard', icon: MdOutlineSpaceDashboard },
 
     ];
     const [open, setOpen] = useState(true);
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const { userInfo } = useSelector(state => state.auth);
+    const { googleUserInfo } = useSelector(state => state.googleAuth);
 
     const showToast = (message, type = "error") => {
         toast[type](message, {
-          autoClose: 3000, // 3 seconds
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+            autoClose: 3000, // 3 seconds
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
         });
-      };
-    const dispatch = useDispatch()
-    const navigate = useNavigate();
+    };
 
     const handleLogout = () => {
-        dispatch(adminLogout());
-        showToast("Logout successfully", "success");
-        navigate('/admin/login')
-      };
+        if (userInfo) {
+            dispatch(logout());
+            showToast("Logout successfully", "success");
+            navigate('/login');
+        } else if (googleUserInfo) {
+            dispatch(clearGoogleUserInfo());
+            showToast("Logout successfully", "success");
+            // Redirect to the login page or do any other necessary actions
+        } else {
+            // Handle if neither userInfo nor googleUserInfo is available
+            showToast("No user logged in", "error");
+        }
+    };
 
     return (
         <section className='flex gap-6'>

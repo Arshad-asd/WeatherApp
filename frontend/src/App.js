@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
-import Sidebar from "./components/AdminSidebar";
-import UserSidebar from "./components/UserSidebar"; // Import the UserSidebar component
+import Sidebar from "./components/sidebar/AdminSidebar";
+import UserSidebar from "./components/sidebar/UserSidebar"; 
 import Routers from "./Containers/routes/Routers";
 import { useLocation } from "react-router-dom";
 

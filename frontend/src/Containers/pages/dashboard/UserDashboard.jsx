@@ -2,7 +2,7 @@ import coldBg from "../../../assets/cold.jpg";
 import hotBg from "../../../assets/hot.jpg";
 import './Dashboard.css';
 import { useEffect, useState } from "react";
-import { getFormattedWeatherData } from "../../service/weatherService";
+import { getFormattedWeatherData } from "../../service/weather/weatherService";
 import Descriptions from "../../../components/Descriptions";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

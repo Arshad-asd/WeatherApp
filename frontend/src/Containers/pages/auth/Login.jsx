@@ -1,10 +1,29 @@
-import React, { useState } from "react";
-import { navigate } from "react-router-dom";
+import React, { useState,useEffect } from "react";
+import { useDispatch,useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoginFormUI from "../../../components/forms/LoginForm";
 import useFormSubmit from "../../service/authentication/LoginService";
 import bacgroundImg from "../../../assets/register.jpg"
+import handleGoogleLogin from "../../service/googleAuth/GoogleLoginService";
+
 const Login = () => {
+  const showToast = toast()
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+
+  const { userInfo } = useSelector((state) => state.auth);
+  const { googleUserInfo } = useSelector((state) => state.googleAuth);
+
+  useEffect(() => {
+    const shouldNavigate = userInfo || googleUserInfo;
+
+    if (shouldNavigate) {
+      console.log("Navigating user dashboard");
+      navigate("/auth/user/dashboard");
+    }
+  }, [navigate, userInfo, googleUserInfo]);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -43,6 +62,7 @@ const Login = () => {
           onChange={handleChange}
           onSubmit={onSubmit}
         />
+        {handleGoogleLogin(dispatch, showToast, navigate)}
       </div>
     </div>
   );
